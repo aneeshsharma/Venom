@@ -13,11 +13,17 @@ server.listen(10)
 while True:
     (client, address) = server.accept()
 
-    target_file = open("target.txt", "r")
-    target_data = target_file.read().split(" ")
-    target_file.close()
-
-    send_response(f'SEND TCP-SYN {target_data[0]} {target_data[1]} {target_data[2]}', client)
+    try:
+        target_file = open("target.txt", "r")
+        target_data = target_file.read().split(" ")
+        target_file.close()
+        if len(target_data) == 3:
+            send_response(f'SEND TCP-SYN {target_data[0]} {target_data[1]} {target_data[2]}', client)
+        else:
+            send_response("NONE", client)
+    except Exception as e:
+        send_response("NONE", client)
+        print(e)
 
     client.close()
 
