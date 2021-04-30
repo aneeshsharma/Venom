@@ -95,5 +95,5 @@ while True:
     handle_command(command)
 
     master.close()
-    time.sleep(3)
+    time.sleep(20)
 
