@@ -15,10 +15,10 @@ while True:
 
     try:
         target_file = open("target.txt", "r")
-        target_data = target_file.read().split(" ")
+        target_command = target_file.read()
         target_file.close()
-        if len(target_data) == 3:
-            send_response(f'SEND HTTP {target_data[0]} {target_data[1]} {target_data[2]}', client)
+        if len(target_command) >= 0:
+            send_response(target_command, client)
         else:
             send_response("NONE", client)
     except Exception as e:
