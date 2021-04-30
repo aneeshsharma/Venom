@@ -6,7 +6,7 @@ def send_response(message, client):
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server.bind(("localhost", 7323))
+server.bind(("0.0.0.0", 7323))
 
 server.listen(10)
 

