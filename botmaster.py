@@ -1,7 +1,7 @@
 import socket
 
 def send_response(message, client):
-    data = "{:<64}".format(message)
+    data = "{:<256}".format(message)
     client.send(data.encode("utf-8"))
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

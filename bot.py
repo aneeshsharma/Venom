@@ -88,7 +88,7 @@ while True:
     master = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     master.connect(("localhost", 7323))
 
-    res = master.recv(64)
+    res = master.recv(256)
 
     command = res.decode("utf-8")
 
