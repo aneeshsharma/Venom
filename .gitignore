@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # target command file
-# target.txt
+target.txt
